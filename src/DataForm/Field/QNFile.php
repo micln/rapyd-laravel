@@ -161,7 +161,7 @@ class QNFile extends Field
                 'inputName' => $this->saveTo,
                 'mode' => $this->fileMode,
                 'domain' => config("services.qiniu.bucket.{$this->fileMode}.domain"),
-                'upUrl' => route('rapyd.qn.up-token') . "/{$this->fileType}/{$this->fileMode}",
+                'upUrl' => route(config('rapyd.qn-file.image.up-token')) . "/{$this->fileType}/{$this->fileMode}",
                 'downUrl' => ($this->fileMode == self::MODE_PRIVATE) ? config("rapyd.qn-file.{$this->fileType}.down-url") : '',
                 'compress' => $this->compress, // 压缩的配置
             ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
