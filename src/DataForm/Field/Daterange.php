@@ -12,10 +12,26 @@ class Daterange extends Date
     public $multiple = true;
     public $clause = "wherebetween";
     
+    protected $suffix_from = '-from';
+    protected $suffix_to = '-to';
+
     public function getNewValue()
     {
+        $this->values = [];
+
+        $origin = $this->name;
+        $this->name = $origin. $this->suffix_from;
+        $this->new_value = null;
         Field::getNewValue();
-        $this->values = explode($this->serialization_sep, $this->new_value);
+        $this->values [] = $this->new_value;
+
+        $this->name = $origin. $this->suffix_to;
+        $this->new_value = null;
+        Field::getNewValue();
+        $this->values [] = $this->new_value;
+
+        $this->name = $origin;
+
         foreach ($this->values as $value) {
             $values[] = $this->humanDateToIso($value);
         }
@@ -28,8 +44,21 @@ class Daterange extends Date
 
     public function getValue()
     {
+        $this->values = [];
+
+        $origin = $this->name;
+        $this->name = $origin. $this->suffix_from;
+        $this->new_value = null;
         Field::getValue();
-        $this->values = explode($this->serialization_sep, $this->value);
+        $this->values [] = $this->value;
+
+        $this->name = $origin. $this->suffix_to;
+        $this->new_value = null;
+        Field::getValue();
+        $this->values [] = $this->value;
+
+        $this->name = $origin;
+
         foreach ($this->values as $value) {
             $values[] = $this->isoDateToHuman($value);
         }
@@ -70,9 +99,9 @@ class Daterange extends Date
                 unset($this->attributes['id']);
                 //$this->attributes['class'] = "form-control";
 
+                $from = Form::text($this->name . $this->suffix_from, @$this->values[0], $this->attributes);
+                $to = Form::text($this->name . $this->suffix_to, @$this->values[1], $this->attributes);
 
-                $from = Form::text($this->name . '[from]', @$this->values[0], $this->attributes);
-                $to = Form::text($this->name . '[to]', @$this->values[1], $this->attributes);
 
                 $output = '
                             <div id="range_' . $this->name . '_container">
