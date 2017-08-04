@@ -11,7 +11,7 @@ class Daterange extends Date
     public $type = "daterange";
     public $multiple = true;
     public $clause = "wherebetween";
-    
+
     protected $suffix_from = '-from';
     protected $suffix_to = '-to';
 

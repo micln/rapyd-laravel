@@ -129,7 +129,11 @@ abstract class Field extends Widget
 
             if (is_a(@$this->relation, 'Illuminate\Database\Eloquent\Relations\BelongsToMany')){
 
-                $this->rel_other_key = $this->relation->getQualifiedRelatedKeyName();
+                if (method_exists($this->relation, 'getOtherKey')) {
+                    $this->rel_other_key = $this->relation->getOtherKey();
+                }else{
+                    $this->rel_other_key = $this->relation->getQualifiedRelatedKeyName();
+                }
 
             }
 
