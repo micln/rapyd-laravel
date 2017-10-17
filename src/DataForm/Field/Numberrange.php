@@ -11,10 +11,47 @@ class Numberrange extends Number
     public $multiple = true;
     public $clause = "wherebetween";
 
+    protected $suffix_from = '-from';
+    protected $suffix_to = '-to';
+
+    public function getNewValue()
+    {
+        $this->values = [];
+
+        $origin = $this->name;
+        $this->name = $origin. $this->suffix_from;
+        $this->new_value = null;
+        Field::getNewValue();
+        $this->values [] = $this->new_value;
+
+        $this->name = $origin. $this->suffix_to;
+        $this->new_value = null;
+        Field::getNewValue();
+        $this->values [] = $this->new_value;
+
+        $this->name = $origin;
+
+        $this->new_value = implode($this->serialization_sep, $this->values);
+    }
+
     public function getValue()
     {
-        parent::getValue();
-        $this->values = explode($this->serialization_sep, $this->value);
+        $this->values = [];
+
+        $origin = $this->name;
+        $this->name = $origin. $this->suffix_from;
+        $this->new_value = null;
+        Field::getValue();
+        $this->values [] = $this->value;
+
+        $this->name = $origin. $this->suffix_to;
+        $this->new_value = null;
+        Field::getValue();
+        $this->values [] = $this->value;
+
+        $this->name = $origin;
+
+        $this->value = implode($this->serialization_sep, $this->values);
     }
 
     public function build()
@@ -42,8 +79,8 @@ class Numberrange extends Number
             case "create":
             case "modify":
 
-                $lower = Form::number($this->name . '[]', @$this->values[0], $this->attributes);
-                $upper = Form::number($this->name . '[]', @$this->values[1], $this->attributes);
+                $lower = Form::number($this->name . $this->suffix_from, @$this->values[0], $this->attributes);
+                $upper = Form::number($this->name . $this->suffix_to, @$this->values[1], $this->attributes);
 
                 $output = '
                             <div id="range_' . $this->name . '_container">
