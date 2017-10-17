@@ -79,8 +79,8 @@ class Numberrange extends Number
             case "create":
             case "modify":
 
-                $lower = Form::number($this->name . $this->suffix_from, @$this->values[0], $this->attributes);
-                $upper = Form::number($this->name . $this->suffix_to, @$this->values[1], $this->attributes);
+                $lower = Form::number($this->name . $this->suffix_from, @trim($this->values[0],$this->serialization_sep), $this->attributes);
+                $upper = Form::number($this->name . $this->suffix_to, @trim($this->values[1],$this->serialization_sep), $this->attributes);
 
                 $output = '
                             <div id="range_' . $this->name . '_container">
