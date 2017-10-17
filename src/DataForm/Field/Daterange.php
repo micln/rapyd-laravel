@@ -99,8 +99,8 @@ class Daterange extends Date
                 unset($this->attributes['id']);
                 //$this->attributes['class'] = "form-control";
 
-                $from = Form::text($this->name . $this->suffix_from, @$this->values[0], $this->attributes);
-                $to = Form::text($this->name . $this->suffix_to, @$this->values[1], $this->attributes);
+                $from = Form::text($this->name . $this->suffix_from, @trim($this->values[0], $this->serialization_sep), $this->attributes);
+                $to = Form::text($this->name . $this->suffix_to, @trim($this->values[1], $this->serialization_sep), $this->attributes);
 
 
                 $output = '
