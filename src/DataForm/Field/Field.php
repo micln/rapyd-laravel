@@ -15,6 +15,10 @@ abstract class Field extends Widget
     public $label;
     public $name;
     public $db_name;
+
+    /**
+     * @var \Illuminate\Database\Eloquent\Relations\Relation|Illuminate\Database\Eloquent\Relations\BelongsToMany|Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public $relation;
     public $rel_name;
     public $rel_field;
@@ -129,10 +133,12 @@ abstract class Field extends Widget
 
             if (is_a(@$this->relation, 'Illuminate\Database\Eloquent\Relations\BelongsToMany')){
 
-                if (method_exists($this->relation, 'getOtherKey')) {
-                    $this->rel_other_key = $this->relation->getOtherKey();
-                }else{
+                if (method_exists($this->relation, 'getQualifiedRelatedPivotKeyName')) {
+                    $this->rel_other_key = $this->relation->getQualifiedRelatedPivotKeyName();
+                }elseif (method_exists($this->relation, 'getQualifiedRelatedKeyName')){
                     $this->rel_other_key = $this->relation->getQualifiedRelatedKeyName();
+                }else {
+                    $this->rel_other_key = $this->relation->getOtherKey();
                 }
 
             }
